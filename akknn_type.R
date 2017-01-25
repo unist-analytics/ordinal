@@ -96,6 +96,7 @@ mstone<-"2012-01-01"
   # stack 
   tdm.stack <- do.call(rbind.fill,candTDM)
   # to sum up the results from level 1~5.
+  # rbind.fill can add up the data frames even though they do not have same entry, which fills missing columns with NA      
   tdm.stack[is.na(tdm.stack)]<-0
   # change NA into 0
   
