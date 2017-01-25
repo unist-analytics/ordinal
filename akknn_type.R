@@ -27,7 +27,7 @@ mstone<-"2012-01-01"
    dir.create(paste(path,"/output/",mstone,"/",i,sep=""))
  }
 
- #in output folder, make folders according to level.            
+ #in output folder, make folders level 0~5            
              
   no.levels<-c()
   dat_lv0=c()
@@ -35,17 +35,20 @@ mstone<-"2012-01-01"
   for (lv in 0:5){
     
     level<-dat[dat$level==lv,]
-    
+    # collect the data based on the level.
     level$Date<-as.Date(level$Date,"%Y%m%d")
     #already the option which deals strings as factors is off so the type of level$Date is string.
     #so as.character is not needed.
+    #"%Y%m%d" makes "20120101" -> "2012-01-01" 
     level<-level[level$Date>=mstone,]
     if(lv==0) dat_lv0=rbind(dat_lv0,level)
     if(lv>0) dat_lv15=rbind(dat_lv15,level)
+    # classify the data whether level is 0 or not
     no.levels<-c(no.levels,nrow(level))
     for(i in 1:nrow(level)){
       filename<-paste(path,"/output/"mstone,"/",lv,"/",i,".txt",sep="")
       write(level$Description[i],file=filename)
+      # save description in right folder 
     }  
   }
   # according to level, classifiy the description and save them into folder which is same to level of descirption 
@@ -56,12 +59,14 @@ mstone<-"2012-01-01"
     corpus.tmp<-tm_map(corpus.tmp,stripWhitespace)
     corpus.tmp<-tm_map(corpus.tmp,content_transformer(tolower))
     corpus.tmp<-tm_map(corpus.tmp,removeWords, stopwords("english"))
+    #delete the useless words in analysing the data.
     corpus.tmp<-Corpus(VectorSource(corpus.tmp))
     return(corpus.tmp)
   }
   # build TDM to make a word frequency.
   generateTDM<-function(level,path){
     s.dir<-sprintf("%s/%s",path,level)
+    # make a correct address which points the level that I want to deal.
     s.cor<-Corpus(DirSource(directory=s.dir,encoding="UTF-8"))
     s.cor.cl<-cleanCorpus(s.cor)
     s.tdm<-TermDocumentMatrix(s.cor.cl)
@@ -69,8 +74,9 @@ mstone<-"2012-01-01"
     return(list(name=level,tdm=s.tdm))
   }
   
-  tdm=lapply(c("1","2","3","4","5") , generateTDM,path=paste(path,mstone,sep=""))
-  tdm0=lapply(c("0") , generateTDM,path=paste(path,mstone,sep=""))
+  tdm=lapply(c("1","2","3","4","5") , generateTDM,path=paste(path,"/output/",mstone,sep=""))
+  #generateTDM is applied to each level.     
+  tdm0=lapply(c("0") , generateTDM,path=paste(path,"/output/"mstone,sep=""))
   
   
   # attch level.
@@ -97,6 +103,7 @@ mstone<-"2012-01-01"
   tdm0.stack <- rbind.fill(tdm.stack[1,],tdm0.stack)
   # to make same frame compairng to level 0 and level 1~5    
   tdm0.stack<-tdm0.stack[-1,]
+  # the first row, which comes from the tdm, is not needed so delete that.    
   tdm0.stack[is.na(tdm0.stack)]<-0
   
   
@@ -186,8 +193,9 @@ mstone<-"2012-01-01"
     test.kknn<-tdm.stack[test.idx,]
     
     train.cand<-train.kknn$targetCandidate
+    #collect the level column
     train.cand.nl<-train.kknn[,!colnames(train.kknn)%in%"targetCandidate"]
-
+    #collect the colunms which are not the level.
     
 
     test.cand<-test.kknn$targetCandidate
