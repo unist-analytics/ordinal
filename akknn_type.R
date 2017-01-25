@@ -10,10 +10,10 @@ options(stringsAsFactors = FALSE)
 path<-"getwd()"
 
 
-source(paste(path,"/kknn.ordinal.R",sep=""))
-load(paste(path,"/dat.RData",sep=""))
+source(paste(path,"/source/kknn.ordinal.R",sep=""))
+load(paste(path,"/input/dat.RData",sep=""))
 # data and function are in current directory so have to add "/"
-
+# from input and source folder, data and function are loaded
 
 # set parameters
 
@@ -69,7 +69,7 @@ mstone<-"2012-01-01"
   
   tdm=lapply(c("1","2","3","4","5") , generateTDM,path=paste(path,mstone,sep=""))
   tdm0=lapply(c("0") , generateTDM,path=paste(path,mstone,sep=""))
-
+  
   
   # attch level.
   bindCandidatetoTDM<-function(tdm){
@@ -89,7 +89,7 @@ mstone<-"2012-01-01"
   tdm.stack <- do.call(rbind.fill,candTDM)
   # to sum up the results from level 1~5.
   tdm.stack[is.na(tdm.stack)]<-0
-  
+  # change NA into 0
   
   tdm0.stack <- do.call(rbind.fill,candTDM0)
   tdm0.stack <- rbind.fill(tdm.stack[1,],tdm0.stack)
@@ -143,6 +143,7 @@ mstone<-"2012-01-01"
    )
     errors<-colMeans(leaveoneout2)
     names(errors)<-seq(0.3,0.6,0.01)
+    # to match alpha values and errors made by chosen alpha.
     out<-seq(0.3,0.6,0.01)[errors==min(errors)]
     
     return(out[1])
@@ -161,10 +162,8 @@ mstone<-"2012-01-01"
   tdm.stack3<-tdm.stack[tdm.stack$targetCandidate==3,]
   tdm.stack4<-tdm.stack[tdm.stack$targetCandidate==4,]
   tdm.stack5<-tdm.stack[tdm.stack$targetCandidate==5,]
-
+  # to divde the tdm.stack into each levels.
   for(nn in 1:100){
-    
-
    
     train.idx1<-sample(nrow(tdm.stack1), ceiling(nrow(tdm.stack1)*0.7))
     test.idx1<-(1:nrow(tdm.stack1)) [-train.idx1]
@@ -197,8 +196,9 @@ mstone<-"2012-01-01"
 
     knn.pred<-knn(train.cand.nl,test.cand.nl,train.cand)
     conf.knn<-table("Predictions"= knn.pred,Actual=test.cand)
+    # to make a table which shows the prediction and actual classes.
     accuracy.knn<-sum(diag(conf.knn)/length(test.idx)*100)    
-    
+    # diagonla means that predictions are same to acutal classes.
     
     kknn.opt<-kknn.ordinal(targetCandidate~., train.kknn,test.cand.nl,distance =2,k=7,kernel = "triangular",param=opt.alpha)
     fit.opt <- fitted(kknn.opt)
