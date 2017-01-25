@@ -36,13 +36,15 @@ mstone<-"2012-01-01"
     
     level<-dat[dat$level==lv,]
     
-    level$Date<-as.Date(substr(as.character(level$Date),1,8),"%Y%m%d")
+    level$Date<-as.Date(level$Date,"%Y%m%d")
+    #already the option which deals strings as factors is off so the type of level$Date is string.
+    #so as.character is not needed.
     level<-level[level$Date>=mstone,]
     if(lv==0) dat_lv0=rbind(dat_lv0,level)
     if(lv>0) dat_lv15=rbind(dat_lv15,level)
     no.levels<-c(no.levels,nrow(level))
     for(i in 1:nrow(level)){
-      filename<-paste(path,mstone,"/",lv,"/",i,".txt",sep="")
+      filename<-paste(path,"/output/"mstone,"/",lv,"/",i,".txt",sep="")
       write(level$Description[i],file=filename)
     }  
   }
