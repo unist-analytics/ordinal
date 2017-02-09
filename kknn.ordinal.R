@@ -1,6 +1,9 @@
+## this fucntion is the base for akknn_type.
+## this function represents awknn method, which is modification of knn method for the imbalanced data set
+## and case of ordinal classification.
 
 options(stringsAsFactors = FALSE)
-
+# to stop to handle strings as factors.
 
 kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.omit(), param=0.5,
           k = 7, distance = 2, kernel = "optimal", ykernel = NULL, 
@@ -10,8 +13,13 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
   weight.y = function(l = 1, diff = 0) {
     k = diff + 1
     result = matrix(0, l, l)
+    # to make a 1x1 matrix composed of 0       
     diag(result) = k
-    for (i in 1:(k - 1)) {
+    # diag function finds the entry of the diagonal of matrix, which returns 0 in this case.
+    # in the result, the entry is chaged from 0 to 1.        
+    for (i in 1:(k - 1))
+    # i in 1:0          
+    {
       for (j in 1:(l - i)) {
         result[j, j + i] = k - i
         result[j + i, j] = k - i
@@ -22,6 +30,7 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
   kernel <- match.arg(kernel, c("rectangular", "triangular", 
                                 "epanechnikov", "biweight", "triweight", "cos", "inv", 
                                 "gaussian", "rank", "optimal"), FALSE)
+  # to find the same function for kerenl parameter.                   
   ca <- match.call()
   response = NULL
   old.contrasts <- getOption("contrasts")
@@ -42,6 +51,7 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
     response <- "nominal"
     lev <- levels(cl)
   }
+  # to sort the response variable's type; ordinal, continuos, nominal.        
   if (distance <= 0) 
     stop("distance must >0")
   if (k <= 0) 
@@ -127,6 +137,7 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
   if (kernel == "optimal") {
     W = rep(optKernel(k, d = d), each = p)
   }
+  # according to type of kernel, the equation for transforming the distance to weight is different.          
   W <- matrix(W, p, k)
   if (response != "continuous") {
     for (i in 1:l) {
