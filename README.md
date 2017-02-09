@@ -3,7 +3,7 @@ This R code is based on the knn method to classify data and improve the knn to a
 
 This repository includes, 
 
-1) data for test, which includes 6363 observation about disaster level and description of damage. 
+1) data for test, which includes 6363 observation about disaster level, description of damage, date and type of disaster. 
 2) function for classfying
 3) main for showing the result by the graph
 
