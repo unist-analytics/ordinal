@@ -1,5 +1,5 @@
 In this repository, there are are codes for classifying the imbalanced and ordinal data.
-This source R code, kknn.ordianl.R, is based on the knn method to classify data and improves the knn method to adjust for imbalanced data set and ordianl classification.
+This main R code, akknn_type.R, is based on the awknn method which improves the "wknn method" that condisders weights in stead of evenly weighting to different distances. Awknn considers the imbalanced data set like our test data set, disaster level, which doesn't have same number of observation in each classes, on the other hand, wkknn just assume that data set is balanced. Thus, when using the wknn method for imbalanced data, you have to apply other methods to make balaned data set. However, when using our awknn method, you doesn't have to do that.   
 
 This repository includes, 
 
@@ -20,3 +20,4 @@ https://www.java.com/ko/download/help/path.xml. This link lets you know how to s
 If you follow the steps of that website, you can find the path setting panel. Then, you have to add the R path, "C:\Program Files\R\R-3.3.2\bin"
 Then, in cmd.exe, input R CMD BATCH "path about r file/akknn_type.R". After this, you can check result, akknn_type.Rout
 
+By seeing the result graph, accuracy, you can verify that the performance of classifying the classes is the best whne using the awknn. 
