@@ -1,5 +1,5 @@
 In this repository, there are are codes for classifying the imbalanced and ordinal data.
-This R code is based on the knn method to classify data and improves the knn method to adjust for imbalanced data set and ordianl classification.
+This source R code, kknn.ordianl.R, is based on the knn method to classify data and improves the knn method to adjust for imbalanced data set and ordianl classification.
 
 This repository includes, 
 
@@ -12,7 +12,7 @@ implementation
 Before running the main program, aknn_type.R, you should make two files, which called "source" and "input", and 
 install the data,dat.Rdate, into "input" file and source function,"kknn.ordinal.R", into "source".
 You must save files like this way to run main R program correctly. If you don't do this, the akknn_tyep.R will make an error of source and load functions.
-If you run "akknn_type.R", you can see the graph for compairng the knn method, wknn and awknn.
+If you run "akknn_type.R", you can see the graph for compairng the knn method, wknn and awknn. 
 
 To use this r program, we suggest you use the "cmd batch", which helps you to run R program without exeuting R or R studio.
 To do this, first you have to set up path sutaible for R. 
