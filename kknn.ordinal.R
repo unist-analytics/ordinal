@@ -45,9 +45,9 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
     response <- "ordinal"
     lev <- levels(cl)
   }
-  if (is.numeric(cl)) 
+ else if (is.numeric(cl)) 
     response <- "continuous"
-  if (is.factor(cl) & !is.ordered(cl)) {
+ else if (is.factor(cl) & !is.ordered(cl)) {
     response <- "nominal"
     lev <- levels(cl)
   }
@@ -84,14 +84,10 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
     Euclid <- TRUE
   if (Euclid) 
     dmtmp <- .C("dmEuclid", as.double(learn), as.double(valid), 
-                as.integer(m), as.integer(p), as.integer(q), dm = double((k + 
-                                                                            1L) * p), cl = integer((k + 1L) * p), k = as.integer(k + 
-                                                                                                                                   1), as.double(distance), as.double(we), dup = FALSE, 
-                PACKAGE = "kknn")
-  else dmtmp <- .C("dm", as.double(learn), as.double(valid), 
-                   as.integer(m), as.integer(p), as.integer(q), dm = double((k + 
-                                                                               1L) * p), cl = integer((k + 1L) * p), k = as.integer(k + 
-                                                                                                                                      1), as.double(distance), as.double(we), dup = FALSE, 
+                as.integer(m), as.integer(p), as.integer(q), dm = double((k + 1L) * p), cl = integer((k + 1L) * p)
+                , k = as.integer(k + 1), as.double(distance), as.double(we), dup = FALSE, PACKAGE = "kknn")
+  else dmtmp <- .C("dm", as.double(learn), as.double(valid), as.integer(m), as.integer(p), as.integer(q), dm = double((k + 1L) * p)
+                 ,cl = integer((k + 1L) * p), k = as.integer(k + 1), as.double(distance), as.double(we), dup = FALSE, 
                    PACKAGE = "kknn")
   D <- matrix(dmtmp$dm, nrow = p, ncol = k + 1)
   C <- matrix(dmtmp$cl, nrow = p, ncol = k + 1)
@@ -146,6 +142,14 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
     weightClass <- weightClass/rowSums(weightClass)
     colnames(weightClass) <- lev
   }
+ else if (response == "continuous") {
+    fit <- rowSums(W * CL)/pmax(rowSums(W), 1e-06)
+  options(contrasts = old.contrasts)
+  result <- list(fitted.values = fit, CL = CL, W = W, D = D, 
+                 C = C, prob = weightClass, response = response, distance = distance, 
+                 call = ca, terms = mt)
+   }
+            
   if (response == "ordinal") {
     blub = length(lev)
     weightClass = weightClass %*% weight.y(blub, ykernel)
@@ -157,12 +161,7 @@ kknn.ordinal<-function (formula = formula(train), train, test, na.action = na.om
     fit <- ordered(fit, levels = 1:l, labels = lev)
   }
 
-  if (response == "continuous") 
-    fit <- rowSums(W * CL)/pmax(rowSums(W), 1e-06)
-  options(contrasts = old.contrasts)
-  result <- list(fitted.values = fit, CL = CL, W = W, D = D, 
-                 C = C, prob = weightClass, response = response, distance = distance, 
-                 call = ca, terms = mt)
+  
   class(result) = "kknn"
   result
 }
