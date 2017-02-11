@@ -7,7 +7,7 @@ lapply(libs,require,character.only=TRUE)
 #in order to make R accept strings as packages
 # set options
 options(stringsAsFactors = FALSE)
-path<-"getwd()"
+path<-getwd()
 
 
 source(paste(path,"/source/kknn.ordinal.R",sep=""))
@@ -20,18 +20,18 @@ load(paste(path,"/input/dat.RData",sep=""))
 mstone<-"2012-01-01"
 #in paper, start date is 2012-01-01
   
-  dir.create(paste(path,"/output",sep="")
+ dir.create(paste(path,"/output",sep=""))
 #first, make a directory called "output" to save all outputs in this folder                        
-  dir.create(paste(path,"/output/",mstone,sep=""))
+ dir.create(paste(path,"/output/",mstone,sep=""))
  for(i in 0:5) {
    dir.create(paste(path,"/output/",mstone,"/",i,sep=""))
  }
 
  #in output folder, make folders level 0~5            
              
-  no.levels<-c()
-  dat_lv0=c()
-  dat_lv15=c()
+ no.levels<-c()
+ dat_lv0=c()
+ dat_lv15=c()
   for (lv in 0:5){
     
     level<-dat[dat$level==lv,]
@@ -46,7 +46,7 @@ mstone<-"2012-01-01"
     # classify the data whether level is 0 or not
     no.levels<-c(no.levels,nrow(level))
     for(i in 1:nrow(level)){
-      filename<-paste(path,"/output/"mstone,"/",lv,"/",i,".txt",sep="")
+      filename<-paste(path,"/output/",mstone,"/",lv,"/",i,".txt",sep="")
       write(level$Description[i],file=filename)
       # save description in right folder 
     }  
@@ -76,7 +76,7 @@ mstone<-"2012-01-01"
   
   tdm=lapply(c("1","2","3","4","5") , generateTDM,path=paste(path,"/output/",mstone,sep=""))
   #generateTDM is applied to each level.     
-  tdm0=lapply(c("0") , generateTDM,path=paste(path,"/output/"mstone,sep=""))
+  tdm0=lapply(c("0") , generateTDM,path=paste(path,"/output/",mstone,sep=""))
   
   
   # attch level.
@@ -150,7 +150,7 @@ mstone<-"2012-01-01"
     }
   
     leaveoneout2<-ldply(list.train,cvkknn,train)
-   )
+   
     errors<-colMeans(leaveoneout2)
     names(errors)<-seq(0.3,0.6,0.01)
     # to match alpha values and errors made by chosen alpha.
