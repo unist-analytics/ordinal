@@ -185,8 +185,8 @@ mstone<-"2012-01-01"
     test.idx4<-(1:nrow(tdm.stack4)) [-train.idx4]
     train.idx5<-sample(nrow(tdm.stack5), ceiling(nrow(tdm.stack5)*0.7))
     test.idx5<-(1:nrow(tdm.stack5)) [-train.idx5]
-    tdm.idx<-rbind(train.idx1,train.idx2,train.idx3,train.idx4,train.idx5)
-    test.idx<-rbind(test.idx1,test.idx2,test.idx3,test.idx4,test.idx5)
+    train.idx<-c(train.idx1,train.idx2,train.idx3,train.idx4,train.idx5)
+    test.idx<-c(test.idx1,test.idx2,test.idx3,test.idx4,test.idx5)
     #to select 70% train data set on each level.
     tdm.stack$targetCandidate<-ordered(tdm.stack$targetCandidate)
     
