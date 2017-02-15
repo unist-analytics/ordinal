@@ -19,7 +19,14 @@ To use this r program, we suggest you use the "cmd batch", which helps you to ru
 To do this, first you have to set up path sutaible for R. 
 https://www.java.com/ko/download/help/path.xml. This link lets you know how to set up the path. 
 If you follow the steps of that website, you can find the path setting panel. Then, you have to add the R path, "C:\Program Files\R\R-3.3.2\bin"
-Then, in cmd.exe, input R CMD BATCH "path about r file/akknn_type.R". After this, you can check result, akknn_type.Rout
+Then, in cmd.exe, input command cd, which is for showing or changing directory path. For example, in my case, my path for main r program is "C:\Users\JJH\Documents\practice R\awknn" so I will put 
+C:\Users\JJH> cd "C:\Users\JJH\Documents\practice R\awknn".
+Then, my directory is changed to that path. After that, I will input 
+C:\Users\JJH\Documents\practice R\awknn>R CMD BATCH   --vanilla --slave "C:\Users\JJH\Documents\practice R\awknn\akknn_type.R"
+then, it will run main r file and make the output, akknn_type.Rout, whihc can be shown by notepad++.
+
+In other words, input cd "your path" which installs the main r program, source and r data and then 
+input R CMD BATCH   --vanilla --slave "your path\akknn_type.R"
 
 By seeing the result graph, accuracy, you can verify that the performance of classifying the classes is the best whne using the awknn.
 
