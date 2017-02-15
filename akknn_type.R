@@ -7,7 +7,8 @@ lapply(libs,require,character.only=TRUE)
 #in order to make R accept strings as packages
 # set options
 options(stringsAsFactors = FALSE)
-path<-getwd()
+path<-"your path"
+# input your path which is the directory for installing the main R file, input folder and source folder.
 
 
 source(paste(path,"/source/kknn.ordinal.R",sep=""))
